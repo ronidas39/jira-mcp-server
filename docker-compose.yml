@@ -19,15 +19,32 @@ services:
       dockerfile: Dockerfile
     container_name: jira-mcp-server
     restart: unless-stopped
-    env_file: .env
     environment:
-      # Inside the compose network, reach Mongo by service name.
+      # Credentials and base URL come from the host .env via compose's
+      # built-in `${VAR}` substitution. We list them explicitly rather than
+      # using `env_file:` because docker-compose v1 (standalone) lets
+      # env_file values silently override the compose-level environment,
+      # which would clobber the transport switch below.
+      JIRA_BASE_URL: ${JIRA_BASE_URL}
+      JIRA_AUTH_MODE: ${JIRA_AUTH_MODE:-api_token}
+      JIRA_EMAIL: ${JIRA_EMAIL}
+      JIRA_API_TOKEN: ${JIRA_API_TOKEN}
       MONGO_URI: mongodb://mongodb:27017
-      MCP_TRANSPORT: ${MCP_TRANSPORT:-http}
+      MONGO_DB: ${MONGO_DB:-jira_mcp}
+      # Transport is hardcoded to http inside the compose stack: stdio
+      # inside a container has nobody to pipe to, and compose's `${VAR:-x}`
+      # substitution would otherwise pick up MCP_TRANSPORT=stdio from the
+      # local-dev .env file and quietly produce a non-listening server.
+      MCP_TRANSPORT: http
       MCP_HTTP_HOST: 0.0.0.0
       MCP_HTTP_PORT: ${MCP_HTTP_PORT:-8765}
-      # The web UI runs on host port 3000 by default; allow it through CORS.
+      # The web UI runs on host port 3000 and on container port 3000
+      # inside the compose network; both origins are allowed by default.
       MCP_CORS_ORIGINS: ${MCP_CORS_ORIGINS:-http://localhost:3000,http://web:3000}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      ALLOW_DELETE_ISSUES: ${ALLOW_DELETE_ISSUES:-false}
+      JIRA_MAX_CONCURRENCY: ${JIRA_MAX_CONCURRENCY:-8}
+      JIRA_MAX_RETRIES: ${JIRA_MAX_RETRIES:-3}
     depends_on:
       mongodb:
         condition: service_healthy

@@ -198,7 +198,12 @@ class Issue(BaseModel):
     labels: list[str] = Field(default_factory=list)
     created: datetime | None = None
     updated: datetime | None = None
-    due_date: datetime | None = Field(default=None, alias="duedate")
+    # Jira returns ``duedate`` as a plain date string ("2025-01-15"), not an
+    # ISO date-time, so a strict ``datetime`` field would force-coerce or
+    # fail the SDK's structured-output schema check. ``str`` keeps the wire
+    # value intact and lets the UI format it. ``resolutiondate`` is full
+    # ISO date-time so it stays typed.
+    due_date: str | None = Field(default=None, alias="duedate")
     resolution_date: datetime | None = Field(default=None, alias="resolutiondate")
 
     comments: list[Comment] = Field(default_factory=list)

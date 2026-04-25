@@ -28,8 +28,22 @@ class MongoConnection:
     @property
     def client(self) -> AsyncIOMotorClient[Any]:
         if self._client is None:
-            self._client = AsyncIOMotorClient[Any](self._uri, tlsCAFile=certifi.where())
+            self._client = AsyncIOMotorClient[Any](self._uri, **self._tls_kwargs())
         return self._client
+
+    def _tls_kwargs(self) -> dict[str, Any]:
+        """Return TLS kwargs only when the URI implies a TLS connection.
+
+        Atlas (``mongodb+srv://``) negotiates TLS by default and needs the
+        certifi bundle on macOS Python.org builds. Plain local mongo runs
+        do not speak TLS at all, and passing ``tlsCAFile`` to pymongo
+        implicitly enables TLS, which then handshake-fails against the
+        plaintext server. Gating on the URI shape keeps both deployments
+        working with one helper.
+        """
+        if self._uri.startswith("mongodb+srv://") or "tls=true" in self._uri:
+            return {"tlsCAFile": certifi.where()}
+        return {}
 
     @property
     def db(self) -> AsyncIOMotorDatabase[Any]:
