@@ -1,0 +1,13 @@
+{
+  "$comment": "Drop the contents of mcpServers into your real claude_desktop_config.json. Replace /absolute/path/to with your checkout location.",
+  "mcpServers": {
+    "jira": {
+      "command": "python",
+      "args": ["-m", "jira_mcp"],
+      "cwd": "/absolute/path/to/jira-mcp-server",
+      "env": {
+        "PYTHONPATH": "/absolute/path/to/jira-mcp-server/src"
+      }
+    }
+  }
+}

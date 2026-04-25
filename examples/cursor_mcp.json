@@ -1,0 +1,10 @@
+{
+  "$comment": "For Cursor: settings → MCP Servers. Replace /absolute/path/to.",
+  "mcpServers": {
+    "jira": {
+      "command": "python",
+      "args": ["-m", "jira_mcp"],
+      "cwd": "/absolute/path/to/jira-mcp-server"
+    }
+  }
+}

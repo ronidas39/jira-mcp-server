@@ -1,0 +1,98 @@
+# ---------------------------------------------------------------------------
+# Local-only working files. Kept on disk for development, never published.
+# ---------------------------------------------------------------------------
+CLAUDE.md
+/memory/
+/.claude/
+.clauderc
+.claude.json
+.claude_*
+/claude_desktop_config.json
+
+# Editor/agent metadata that some IDEs drop next to source.
+.cursor/
+.cursorrules
+.cursorignore
+.windsurfrules
+.aider*
+.continue/
+.cline/
+.copilot/
+.github/copilot-instructions.md
+
+# Generic AI tooling artifacts.
+.ai/
+.agent/
+*.ai-context
+*.prompt
+PROMPTS.md
+AGENTS.md
+
+# Internal planning notes that do not belong in the public repo.
+PROGRESS.md
+STATUS.md
+DECISIONS.md
+SKILLS.md
+ERRORS.md
+SESSIONS.md
+/docs/decisions/
+/docs/runbooks/vibe-coding-workflow.md
+
+# ---------------------------------------------------------------------------
+# Secrets and local environment
+# ---------------------------------------------------------------------------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+
+# Local audit fallback file used when MongoDB is unreachable.
+.audit-buffer.jsonl
+
+# ---------------------------------------------------------------------------
+# Python
+# ---------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+pip-wheel-metadata/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Test and coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+
+# Type and lint caches
+.mypy_cache/
+.ruff_cache/
+.dmypy.json
+
+# ---------------------------------------------------------------------------
+# IDE and OS noise
+# ---------------------------------------------------------------------------
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Docker
+*.pid

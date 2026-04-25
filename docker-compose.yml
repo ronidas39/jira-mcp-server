@@ -1,0 +1,35 @@
+services:
+  mongodb:
+    image: mongo:7
+    container_name: jira-mcp-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  server:
+    build: .
+    container_name: jira-mcp-server
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      # Inside the network, reach Mongo by service name
+      MONGO_URI: mongodb://mongodb:27017
+      MCP_TRANSPORT: ${MCP_TRANSPORT:-http}
+      MCP_HTTP_HOST: 0.0.0.0
+      MCP_HTTP_PORT: ${MCP_HTTP_PORT:-8765}
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    ports:
+      # Only exposed when MCP_TRANSPORT=http
+      - "${MCP_HTTP_PORT:-8765}:${MCP_HTTP_PORT:-8765}"
+
+volumes:
+  mongo_data:
