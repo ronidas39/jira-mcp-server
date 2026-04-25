@@ -13,9 +13,11 @@ RUN npm ci
 
 # Copy source and build the production bundle. Tailwind v4 plus the App
 # Router emit a standalone server under .next/standalone when configured;
-# otherwise we ship the full .next directory.
+# otherwise we ship the full .next directory. A `public/` directory is
+# created if missing because Next 15 expects to serve it at runtime even
+# when the project ships no static assets.
 COPY . .
-RUN npm run build
+RUN mkdir -p public && npm run build
 
 # -----------------------------------------------------------------------------
 # Runtime stage
