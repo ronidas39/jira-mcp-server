@@ -96,3 +96,14 @@ Thumbs.db
 
 # Docker
 *.pid
+
+# ---------------------------------------------------------------------------
+# Web UI (Next.js)
+# ---------------------------------------------------------------------------
+web/node_modules
+web/.next
+web/out
+web/.env.local
+web/.env*.local
+web/coverage
+web/*.tsbuildinfo

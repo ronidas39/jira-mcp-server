@@ -9,10 +9,10 @@ mistake to make and the worst one to ship.
 
 from __future__ import annotations
 
-from typing import Literal
+from typing import Annotated, Literal
 
 from pydantic import Field, HttpUrl, SecretStr, field_validator
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -47,6 +47,12 @@ class Settings(BaseSettings):
     mcp_transport: Literal["stdio", "http"] = "stdio"
     mcp_http_host: str = "127.0.0.1"
     mcp_http_port: int = 8765
+    # NoDecode tells pydantic-settings to skip its built-in JSON parse for
+    # this field so our `mode="before"` validator can split a comma-separated
+    # env value cleanly.
+    mcp_cors_origins: Annotated[list[str], NoDecode] = Field(
+        default_factory=lambda: ["http://localhost:3000"],
+    )
 
     # Behaviour
     log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR"] = "INFO"
@@ -62,6 +68,20 @@ class Settings(BaseSettings):
         if v.scheme != "https":
             msg = "JIRA_BASE_URL must use https://"
             raise ValueError(msg)
+        return v
+
+    @field_validator("mcp_cors_origins", mode="before")
+    @classmethod
+    def _split_cors_origins(cls, v: object) -> object:
+        """Allow CORS origins to arrive as a comma-separated env string.
+
+        Pydantic-settings reads env vars as strings, so the natural way to
+        configure this list from a shell is `MCP_CORS_ORIGINS=a,b,c`. We
+        accept that shape here, strip whitespace, and drop empties; lists
+        passed programmatically pass through untouched.
+        """
+        if isinstance(v, str):
+            return [item.strip() for item in v.split(",") if item.strip()]
         return v
 
     def assert_auth_complete(self) -> None:

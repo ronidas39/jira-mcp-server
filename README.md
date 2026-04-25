@@ -34,6 +34,29 @@ docker compose up -d mongodb
 python scripts/init_db.py   # creates the jira_mcp database with indexes
 ```
 
+### Running over HTTP
+
+The default transport is stdio. For browser UIs or remote clients, run the
+streamable HTTP transport instead:
+
+```bash
+MCP_TRANSPORT=http MCP_HTTP_PORT=8765 python -m jira_mcp
+```
+
+The server mounts the MCP endpoint at `/mcp`. Override `MCP_CORS_ORIGINS`
+(comma-separated) to allow a non-default UI origin. Smoke-test the endpoint
+with an `initialize` request:
+
+```bash
+curl -i -X POST http://127.0.0.1:8765/mcp \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json, text/event-stream" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-03-26","capabilities":{},"clientInfo":{"name":"curl","version":"0"}}}'
+```
+
+The response carries an `Mcp-Session-Id` header; reuse it on later
+requests to keep the same session.
+
 ## Connecting from a client
 
 Claude Desktop expects an entry under `mcpServers` in `claude_desktop_config.json`.
