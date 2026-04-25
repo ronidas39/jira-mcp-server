@@ -780,8 +780,44 @@ def build() -> None:
     _bullet(doc, "Open /analytics; the workload card lists per-assignee count plus points.")
     _bullet(doc, "Compare against the team's intended distribution before adding more work.")
 
-    # 17. Re-running this guide
-    _h1(doc, "17. Re-running this guide")
+    # 17. Screenshots gallery
+    _h1(doc, "17. Screenshots gallery")
+    _para(
+        doc,
+        "Full-page captures of every dashboard route live under "
+        "docs/screenshots/. They sit alongside this guide so a reader can "
+        "see what the UI is supposed to look like without running the "
+        "stack first. Each PNG maps one-to-one with a route in section 8:",
+    )
+    _kv_table(
+        doc,
+        ["Route", "File"],
+        [
+            ["/", "docs/screenshots/dashboard.png"],
+            ["/issues", "docs/screenshots/issues-list.png"],
+            ["/issues/new", "docs/screenshots/issues-new.png"],
+            ["/issues/{key}", "docs/screenshots/issue-detail.png"],
+            ["/projects", "docs/screenshots/projects-list.png"],
+            ["/projects/{key}", "docs/screenshots/project-detail.png"],
+            ["/sprints", "docs/screenshots/sprints.png"],
+            ["/analytics", "docs/screenshots/analytics.png"],
+            ["/chat", "docs/screenshots/chat.png"],
+            ["/settings", "docs/screenshots/settings.png"],
+        ],
+    )
+    _para(
+        doc,
+        "Re-capture from the running stack with:",
+    )
+    _code_block(
+        doc,
+        "pip install playwright && playwright install chromium\n"
+        "docker-compose --profile ui up -d   # or 'cd web && npm run dev'\n"
+        "python scripts/capture_screenshots.py\n",
+    )
+
+    # 18. Re-running this guide
+    _h1(doc, "18. Re-running this guide")
     _para(
         doc,
         "Re-generate this DOCX from source after substantive changes:",
