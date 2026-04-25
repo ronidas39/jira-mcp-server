@@ -1,8 +1,8 @@
 """Transport selection and serve loop.
 
 Two transports are supported by the MCP spec for this server: stdio (the
-canonical local transport, used by Claude Desktop, Cursor, and Claude Code)
-and streamable HTTP (used when the server runs behind a reverse proxy and
+canonical local transport, used by every MCP-capable IDE assistant) and
+streamable HTTP (used when the server runs behind a reverse proxy and
 clients connect over the network).
 
 The stdio path uses the SDK's `stdio_server` async context manager, which
