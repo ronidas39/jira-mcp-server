@@ -75,10 +75,20 @@ def markdown_to_adf(text: str) -> dict[str, Any]:
     }
 
 
-def _summary_field_set(fields: list[str] | None) -> str | None:
-    """Translate the optional fields list to the Jira ``fields`` query param."""
+_DEFAULT_SUMMARY_FIELDS = ("summary", "status", "assignee", "priority", "issuetype", "updated")
+
+
+def _summary_field_set(fields: list[str] | None) -> str:
+    """Translate the optional fields list into the Jira ``fields`` query param.
+
+    The new ``/rest/api/3/search/jql`` endpoint omits ``key`` and the
+    ``fields`` envelope from search hits unless a ``fields`` parameter is
+    passed (the legacy endpoint defaulted to ``*navigable``). We default to
+    the columns ``IssueSummary`` actually reads so callers get useful
+    payloads without having to spell them every time.
+    """
     if fields is None:
-        return None
+        return ",".join(_DEFAULT_SUMMARY_FIELDS)
     return ",".join(fields)
 
 
@@ -182,15 +192,17 @@ class IssueClient:
                 Jira pick its default navigable set.
             start_at: Zero-based offset for pagination.
         """
+        # Atlassian retired /rest/api/3/search in 2025; tenants now answer
+        # 410 Gone. The replacement /rest/api/3/search/jql is cursor-paged
+        # (nextPageToken / isLast) rather than offset-paged, and no longer
+        # returns a `total` field. We map the new shape onto the existing
+        # output model: total degrades to the page length when absent.
         params: dict[str, Any] = {
             "jql": jql,
-            "startAt": start_at,
             "maxResults": max_results,
+            "fields": _summary_field_set(fields),
         }
-        field_param = _summary_field_set(fields)
-        if field_param is not None:
-            params["fields"] = field_param
-        body = await self._jira.get("/rest/api/3/search", params=params)
+        body = await self._jira.get("/rest/api/3/search/jql", params=params)
         raw_issues = body.get("issues") or []
         issues: list[IssueSummary] = []
         for raw in raw_issues:

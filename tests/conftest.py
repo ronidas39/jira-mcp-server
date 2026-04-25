@@ -71,7 +71,7 @@ def _mount_default_routes(router: respx.MockRouter) -> respx.MockRouter:
     router.get(f"{JIRA_BASE_URL}/rest/api/3/issue/PROJ-123/transitions").mock(
         return_value=httpx.Response(200, json=_body("transitions"))
     )
-    router.get(f"{JIRA_BASE_URL}/rest/api/3/search").mock(
+    router.get(f"{JIRA_BASE_URL}/rest/api/3/search/jql").mock(
         return_value=httpx.Response(200, json=_body("issue_search_response"))
     )
     router.get(f"{JIRA_BASE_URL}/rest/api/3/project/PROJ").mock(

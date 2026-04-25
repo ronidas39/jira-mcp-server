@@ -89,22 +89,29 @@ async def _search_all(
     fields by id; the ``IssueSummary`` projection on
     :class:`SearchIssuesOutput` strips those, so this helper falls back to
     the underlying HTTP client for the wire payload.
+
+    Atlassian retired ``/rest/api/3/search`` in 2025; the replacement
+    ``/rest/api/3/search/jql`` is cursor-paged via ``nextPageToken`` plus
+    ``isLast``, with no ``total`` field, so the loop walks the cursor
+    until the server flags the last page.
     """
     out: list[dict[str, Any]] = []
-    start = 0
+    next_token: str | None = None
     while True:
         params: dict[str, Any] = {
             "jql": jql,
-            "startAt": start,
             "maxResults": _PAGE_SIZE,
             "fields": ",".join(fields),
         }
-        body = await issues._jira.get("/rest/api/3/search", params=params)
+        if next_token:
+            params["nextPageToken"] = next_token
+        body = await issues._jira.get("/rest/api/3/search/jql", params=params)
         page = body.get("issues") or []
         out.extend(page)
-        total = int(body.get("total", 0))
-        start += len(page)
-        if not page or start >= total:
+        if body.get("isLast", True):
+            break
+        next_token = body.get("nextPageToken")
+        if not next_token:
             break
     return out
 
@@ -319,18 +326,18 @@ async def _dispatch(
         out_w = await workload_by_assignee(
             ctx, WorkloadByAssigneeInput.model_validate(arguments)
         )
-        return out_w.model_dump(mode="json")
+        return out_w.model_dump(mode="json", by_alias=True)
     if name == "issues_by_status":
         out_s = await issues_by_status(
             ctx, IssuesByStatusInput.model_validate(arguments)
         )
-        return out_s.model_dump(mode="json")
+        return out_s.model_dump(mode="json", by_alias=True)
     if name == "velocity":
         out_v = await velocity(ctx, VelocityInput.model_validate(arguments))
-        return out_v.model_dump(mode="json")
+        return out_v.model_dump(mode="json", by_alias=True)
     if name == "stale_issues":
         out_st = await stale_issues(ctx, StaleIssuesInput.model_validate(arguments))
-        return out_st.model_dump(mode="json")
+        return out_st.model_dump(mode="json", by_alias=True)
     raise ValueError(f"unknown analytics tool: {name}")
 
 
