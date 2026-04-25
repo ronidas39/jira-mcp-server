@@ -34,6 +34,53 @@ docker compose up -d mongodb
 python scripts/init_db.py   # creates the jira_mcp database with indexes
 ```
 
+### Running with OAuth
+
+The server supports Atlassian's three-legged OAuth (3LO) as an alternative to
+API tokens. Use it when the deployment must act on behalf of a real user
+account, or when an API token is not an option for the team.
+
+1. Create an OAuth 2.0 (3LO) app at
+   https://developer.atlassian.com/console/myapps/. Add the Jira REST API
+   permissions you need (the defaults below cover the tools shipped here).
+2. Register a redirect URI that points at a port on your machine. The login
+   script will bind a short-lived listener to that port. A typical value is
+   `http://localhost:9000/callback`.
+3. Set the OAuth fields in `.env`:
+
+   ```
+   JIRA_AUTH_MODE=oauth
+   JIRA_OAUTH_CLIENT_ID=...
+   JIRA_OAUTH_CLIENT_SECRET=...
+   JIRA_OAUTH_REDIRECT_URI=http://localhost:9000/callback
+   JIRA_OAUTH_SCOPES=read:jira-work write:jira-work read:jira-user offline_access
+   ```
+
+   `offline_access` must stay in the scope list so Atlassian issues a refresh
+   token. Without it the server cannot stay logged in across restarts.
+
+4. Run the one-shot login script:
+
+   ```bash
+   python scripts/oauth_login.py
+   ```
+
+   The script opens the consent screen in your browser, captures the
+   redirect, exchanges the code, resolves the tenant's `cloud_id`, and writes
+   the tokens to MongoDB. On success it prints `ok cloud_id=<id>`.
+
+5. Start the server as usual:
+
+   ```bash
+   python -m jira_mcp
+   ```
+
+   In OAuth mode, REST calls go through `https://api.atlassian.com/ex/jira/{cloudId}`
+   rather than your tenant's `*.atlassian.net` host. The provider refreshes the
+   access token automatically when it is within sixty seconds of expiry. If the
+   refresh token itself is rejected (revoked, rotated, or expired) the server
+   raises a clear authentication error pointing back at `scripts/oauth_login.py`.
+
 ### Running over HTTP
 
 The default transport is stdio. For browser UIs or remote clients, run the
