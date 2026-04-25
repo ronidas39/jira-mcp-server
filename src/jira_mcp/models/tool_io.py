@@ -285,6 +285,72 @@ class GetSprintOutput(_IOModel):
     sprint: Sprint = Field(description="Sprint details including dates and goal.")
 
 
+class MoveToSprintInput(_IOModel):
+    """Inputs for moving issues into a sprint."""
+
+    sprint_id: int = Field(
+        description="Target sprint id; the agile API accepts numeric ids only."
+    )
+    issue_keys: list[str] = Field(
+        min_length=1,
+        description=(
+            "Issue keys to move into the sprint, e.g. ['PROJ-1', 'PROJ-2']. "
+            "Jira's agile endpoint hard-caps at 50 keys per request; the "
+            "client batches longer lists internally."
+        ),
+    )
+
+
+class MoveToSprintOutput(_IOModel):
+    """Result of a sprint-move operation."""
+
+    moved_count: int = Field(
+        description="Total number of issues Jira accepted across all batches."
+    )
+
+
+class SprintReportInput(_IOModel):
+    """Inputs for the sprint synthesis report."""
+
+    sprint_id: int = Field(
+        description="Sprint id to summarise; uses the active sprint state at fetch time."
+    )
+
+
+class SprintReportOutput(_IOModel):
+    """Synthesised sprint report.
+
+    The committed count is approximated from the issues currently associated
+    with the sprint because the precise "scope at sprint start" requires a
+    changelog scan that is too heavy for an interactive tool. ``at_risk`` is
+    populated only while the sprint is still in the ``active`` state and the
+    end date has passed; closed sprints report zero at_risk by convention.
+    """
+
+    sprint: Sprint = Field(description="Sprint metadata used for the report.")
+    committed: int = Field(
+        description=(
+            "Approximate count of issues committed at sprint start. Derived "
+            "from the current sprint membership; see class docstring for the "
+            "trade off."
+        ),
+    )
+    delivered: int = Field(
+        description=(
+            "Issues whose status category is 'done' at the time of fetch."
+        ),
+    )
+    at_risk: int = Field(
+        description=(
+            "Issues still in progress past the sprint end date while the "
+            "sprint is active. Always 0 for closed or future sprints."
+        ),
+    )
+    issues: list[IssueSummary] = Field(
+        description="The full set of issues currently linked to the sprint."
+    )
+
+
 # ---------------------------------------------------------------------------
 # Analytics
 # ---------------------------------------------------------------------------
@@ -668,10 +734,14 @@ __all__ = [
     "ListTransitionsOutput",
     "ListUsersInput",
     "ListUsersOutput",
+    "MoveToSprintInput",
+    "MoveToSprintOutput",
     "ResolveUserInput",
     "ResolveUserOutput",
     "SearchIssuesInput",
     "SearchIssuesOutput",
+    "SprintReportInput",
+    "SprintReportOutput",
     "SprintVelocity",
     "StaleIssuesInput",
     "StaleIssuesOutput",
