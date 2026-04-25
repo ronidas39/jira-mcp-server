@@ -56,9 +56,9 @@ async def test_get_404_raises_not_found(
     mock_jira_http: respx.MockRouter, jira_client: JiraClient
 ) -> None:
     """A 404 from Jira surfaces as NotFoundError, not a generic JiraApiError."""
-    mock_jira_http.get(
-        "https://example.atlassian.net/rest/api/3/issue/MISSING-1"
-    ).mock(return_value=httpx.Response(404, json={"errorMessages": ["gone"]}))
+    mock_jira_http.get("https://example.atlassian.net/rest/api/3/issue/MISSING-1").mock(
+        return_value=httpx.Response(404, json={"errorMessages": ["gone"]})
+    )
     client = IssueClient(jira_client)
     with pytest.raises(NotFoundError):
         await client.get("MISSING-1")
@@ -81,9 +81,7 @@ async def test_create_sends_adf_description_and_returns_key(
             },
         )
 
-    mock_jira_http.post(
-        "https://example.atlassian.net/rest/api/3/issue"
-    ).mock(side_effect=_capture)
+    mock_jira_http.post("https://example.atlassian.net/rest/api/3/issue").mock(side_effect=_capture)
 
     client = IssueClient(jira_client)
     out = await client.create(
@@ -118,9 +116,9 @@ async def test_transition_with_comment_sends_adf_in_update_block(
         captured["body"] = _json.loads(request.content)
         return httpx.Response(204)
 
-    mock_jira_http.post(
-        "https://example.atlassian.net/rest/api/3/issue/PROJ-123/transitions"
-    ).mock(side_effect=_capture)
+    mock_jira_http.post("https://example.atlassian.net/rest/api/3/issue/PROJ-123/transitions").mock(
+        side_effect=_capture
+    )
 
     client = IssueClient(jira_client)
     await client.transition("PROJ-123", "31", comment="Marking as done.")

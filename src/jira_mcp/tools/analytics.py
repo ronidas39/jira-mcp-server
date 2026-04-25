@@ -80,9 +80,7 @@ def _resolve_story_points_field(settings: Settings) -> str:
     return getattr(settings, "story_points_field", DEFAULT_STORY_POINTS_FIELD)
 
 
-async def _search_all(
-    issues: IssueClient, jql: str, fields: list[str]
-) -> list[dict[str, Any]]:
+async def _search_all(issues: IssueClient, jql: str, fields: list[str]) -> list[dict[str, Any]]:
     """Page through a JQL search and return the raw issue dicts.
 
     Aggregation needs the raw ``fields`` map so the caller can read custom
@@ -140,9 +138,7 @@ async def workload_by_assignee(
     for issue in raw_issues:
         fields = issue.get("fields") or {}
         assignee = fields.get("assignee")
-        bucket: str | None = (
-            assignee.get("accountId") if isinstance(assignee, dict) else None
-        )
+        bucket: str | None = assignee.get("accountId") if isinstance(assignee, dict) else None
         counts[bucket] += 1
         user_lookup.setdefault(bucket, assignee if isinstance(assignee, dict) else None)
         sp = fields.get(points_field)
@@ -162,9 +158,7 @@ async def issues_by_status(
 ) -> IssuesByStatusOutput:
     """Count issues per status name within a project."""
     builder = Jql().where(project_eq(payload.project_key))
-    raw_issues = await _search_all(
-        ctx.issues, builder.build(), fields=["status", "summary"]
-    )
+    raw_issues = await _search_all(ctx.issues, builder.build(), fields=["status", "summary"])
     counts: Counter[str] = Counter()
     for issue in raw_issues:
         fields = issue.get("fields") or {}
@@ -172,15 +166,11 @@ async def issues_by_status(
         name = status.get("name") if isinstance(status, dict) else None
         if name:
             counts[name] += 1
-    buckets = [
-        StatusBucket(status=name, count=count) for name, count in counts.most_common()
-    ]
+    buckets = [StatusBucket(status=name, count=count) for name, count in counts.most_common()]
     return IssuesByStatusOutput(buckets=buckets)
 
 
-async def velocity(
-    ctx: AnalyticsToolContext, payload: VelocityInput
-) -> VelocityOutput:
+async def velocity(ctx: AnalyticsToolContext, payload: VelocityInput) -> VelocityOutput:
     """Compute completed and committed story points per closed sprint.
 
     Uses ``GET /rest/agile/1.0/board/{id}/sprint?state=closed`` to list the
@@ -218,11 +208,7 @@ async def velocity(
                 committed_points=committed,
             )
         )
-    avg = (
-        sum(s.completed_points for s in per_sprint) / len(per_sprint)
-        if per_sprint
-        else 0.0
-    )
+    avg = sum(s.completed_points for s in per_sprint) / len(per_sprint) if per_sprint else 0.0
     return VelocityOutput(sprints=per_sprint, average_completed=avg)
 
 
@@ -247,9 +233,7 @@ async def _sum_points(
     return total
 
 
-async def stale_issues(
-    ctx: AnalyticsToolContext, payload: StaleIssuesInput
-) -> StaleIssuesOutput:
+async def stale_issues(ctx: AnalyticsToolContext, payload: StaleIssuesInput) -> StaleIssuesOutput:
     """Return open issues that have not been updated in N days, oldest first."""
     statuses = payload.statuses or list(_DEFAULT_STALE_STATUSES)
     builder = (
@@ -323,14 +307,10 @@ async def _dispatch(
 ) -> dict[str, Any]:
     """Route an analytics tool call to its handler."""
     if name == "workload_by_assignee":
-        out_w = await workload_by_assignee(
-            ctx, WorkloadByAssigneeInput.model_validate(arguments)
-        )
+        out_w = await workload_by_assignee(ctx, WorkloadByAssigneeInput.model_validate(arguments))
         return out_w.model_dump(mode="json", by_alias=True)
     if name == "issues_by_status":
-        out_s = await issues_by_status(
-            ctx, IssuesByStatusInput.model_validate(arguments)
-        )
+        out_s = await issues_by_status(ctx, IssuesByStatusInput.model_validate(arguments))
         return out_s.model_dump(mode="json", by_alias=True)
     if name == "velocity":
         out_v = await velocity(ctx, VelocityInput.model_validate(arguments))
@@ -363,6 +343,7 @@ def register(server: Server, ctx: AnalyticsToolContext) -> dict[str, ToolEntry]:
     tool_defs = {t.name: t for t in _build_tool_definitions()}
     registry: dict[str, ToolEntry] = {}
     for name, tool in tool_defs.items():
+
         async def _handler(args: dict[str, Any], *, _name: str = name) -> dict[str, Any]:
             return await _dispatch(ctx, _name, args)
 

@@ -13,6 +13,7 @@ duplicating processors on every reconfigure.
 from __future__ import annotations
 
 import logging
+from collections.abc import MutableMapping
 from typing import Any
 
 import structlog
@@ -20,7 +21,9 @@ import structlog
 _SENSITIVE_KEYS = {"authorization", "password", "token", "api_key", "secret"}
 
 
-def _scrub_sensitive(_: Any, __: str, event_dict: dict[str, Any]) -> dict[str, Any]:
+def _scrub_sensitive(
+    _: Any, __: str, event_dict: MutableMapping[str, Any]
+) -> MutableMapping[str, Any]:
     """structlog processor: replace sensitive values with `***`."""
     for key in list(event_dict.keys()):
         if key.lower() in _SENSITIVE_KEYS:

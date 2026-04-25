@@ -36,4 +36,4 @@ class ApiTokenAuth:
 
 # Compile-time check that ApiTokenAuth satisfies the AuthProvider Protocol.
 # The annotation alone is enough; mypy will catch any drift.
-_PROVIDER_CHECK: type[AuthProvider] = ApiTokenAuth  # type: ignore[type-abstract]
+_PROVIDER_CHECK: type[AuthProvider] = ApiTokenAuth

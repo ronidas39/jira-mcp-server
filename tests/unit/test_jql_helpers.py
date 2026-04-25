@@ -61,7 +61,7 @@ def test_jql_builder_composes_non_trivial_query() -> None:
     assert jql == (
         '(project = "PROJ") AND '
         '(status in ("To Do", "In Progress")) AND '
-        '(updated < -7d) '
+        "(updated < -7d) "
         "ORDER BY updated ASC"
     )
 

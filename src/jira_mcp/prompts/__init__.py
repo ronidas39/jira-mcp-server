@@ -30,9 +30,7 @@ def all_prompts() -> list[Prompt]:
     return [definition for definition, _ in _REGISTRY.values()]
 
 
-async def render_prompt(
-    name: str, arguments: dict[str, str] | None
-) -> GetPromptResult:
+async def render_prompt(name: str, arguments: dict[str, str] | None) -> GetPromptResult:
     """Dispatch a ``get_prompt`` call to the matching render function.
 
     Args:
@@ -70,9 +68,7 @@ def register(server: Server, ctx: Any) -> None:
         return all_prompts()
 
     @server.get_prompt()
-    async def _get_prompt(
-        name: str, arguments: dict[str, str] | None
-    ) -> GetPromptResult:
+    async def _get_prompt(name: str, arguments: dict[str, str] | None) -> GetPromptResult:
         """Render the prompt requested by the client."""
         return await render_prompt(name, arguments)
 

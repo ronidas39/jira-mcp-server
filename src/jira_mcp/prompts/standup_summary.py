@@ -13,10 +13,7 @@ NAME = "standup-summary"
 
 DEFINITION = Prompt(
     name=NAME,
-    description=(
-        "Produce a 24-hour standup digest for a project, grouped by "
-        "assignee. Read-only."
-    ),
+    description=("Produce a 24-hour standup digest for a project, grouped by assignee. Read-only."),
     arguments=[
         PromptArgument(
             name="project_key",

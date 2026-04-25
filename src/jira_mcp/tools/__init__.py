@@ -15,6 +15,8 @@ from typing import Any
 from mcp import types
 from mcp.server import Server
 
+from ..clients.projects import ProjectClient
+from ..clients.users import UserClient
 from . import analytics as analytics_tools
 from . import issues as issue_tools
 from . import projects as project_tools
@@ -31,8 +33,8 @@ def register_all(
     issue_ctx: issue_tools.IssueToolContext,
     analytics_ctx: analytics_tools.AnalyticsToolContext,
     sprint_ctx: sprint_tools.SprintToolContext,
-    project_client: project_tools.ProjectClient,
-    user_client: user_tools.UserClient,
+    project_client: ProjectClient,
+    user_client: UserClient,
 ) -> dict[str, ToolEntry]:
     """Compose every tool group into one ``list_tools`` / ``call_tool`` pair.
 

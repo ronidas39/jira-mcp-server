@@ -8,13 +8,14 @@ without reaching into submodules:
 
 from __future__ import annotations
 
-from .app import ServerContext, create_app
+from .app import ServerContext, create_app, resolve_oauth_cloud_id
 from .lifespan import shutdown, startup
 from .transport import run
 
 __all__ = [
     "ServerContext",
     "create_app",
+    "resolve_oauth_cloud_id",
     "run",
     "shutdown",
     "startup",

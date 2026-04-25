@@ -39,7 +39,7 @@ class AuditRepository:
 
     def __init__(
         self,
-        db: AsyncIOMotorDatabase,
+        db: AsyncIOMotorDatabase[Any],
         *,
         buffer_path: Path | None = None,
     ) -> None:

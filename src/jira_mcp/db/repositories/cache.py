@@ -21,7 +21,7 @@ class CacheRepository:
 
     COLLECTION = "cache"
 
-    def __init__(self, db: AsyncIOMotorDatabase) -> None:
+    def __init__(self, db: AsyncIOMotorDatabase[Any]) -> None:
         """Bind the repository to a database handle.
 
         Args:

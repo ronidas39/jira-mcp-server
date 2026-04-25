@@ -7,13 +7,15 @@ serve before the first request lands.
 
 from __future__ import annotations
 
+from typing import Any
+
 from motor.motor_asyncio import AsyncIOMotorDatabase
 
 from jira_mcp.db.repositories.audit import AuditRepository
 from jira_mcp.db.repositories.cache import CacheRepository
 
 
-async def ensure_all_indexes(db: AsyncIOMotorDatabase) -> None:
+async def ensure_all_indexes(db: AsyncIOMotorDatabase[Any]) -> None:
     """Create every collection index used by the server.
 
     Args:

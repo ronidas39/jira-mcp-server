@@ -23,7 +23,13 @@ async def _run() -> int:
     pulling Mongo, httpx, and the MCP SDK into memory.
     """
     from .config import load_settings  # noqa: PLC0415  (lazy: cheap --help)
-    from .server import create_app, run, shutdown, startup  # noqa: PLC0415
+    from .server import (  # noqa: PLC0415
+        create_app,
+        resolve_oauth_cloud_id,
+        run,
+        shutdown,
+        startup,
+    )
     from .utils.logging import get_logger  # noqa: PLC0415
 
     try:
@@ -35,8 +41,16 @@ async def _run() -> int:
 
     log = get_logger("jira_mcp")
 
+    oauth_cloud_id: str | None = None
+    if settings.jira_auth_mode == "oauth":
+        try:
+            oauth_cloud_id = await resolve_oauth_cloud_id(settings)
+        except Exception as exc:
+            log.error("startup.failed", stage="resolve_oauth_cloud_id", error=str(exc))
+            return 1
+
     try:
-        ctx = create_app(settings)
+        ctx = create_app(settings, oauth_cloud_id=oauth_cloud_id)
     except Exception as exc:
         log.error("startup.failed", stage="create_app", error=str(exc))
         return 1

@@ -52,9 +52,7 @@ def test_https_is_required(monkeypatch: pytest.MonkeyPatch, tmp_path) -> None:
         Settings()  # type: ignore[call-arg]
 
 
-def test_api_token_mode_accepts_complete_config(
-    monkeypatch: pytest.MonkeyPatch, tmp_path
-) -> None:
+def test_api_token_mode_accepts_complete_config(monkeypatch: pytest.MonkeyPatch, tmp_path) -> None:
     """Accept a fully-populated api_token configuration (FR-103).
 
     Verifies that load_settings returns a Settings instance when every
@@ -78,9 +76,7 @@ def test_api_token_mode_accepts_complete_config(
     assert str(settings.jira_base_url).startswith("https://")
 
 
-def test_api_token_mode_missing_email_raises(
-    monkeypatch: pytest.MonkeyPatch, tmp_path
-) -> None:
+def test_api_token_mode_missing_email_raises(monkeypatch: pytest.MonkeyPatch, tmp_path) -> None:
     """Raise a clear ValueError when JIRA_EMAIL is missing (FR-103, FR-203).
 
     Verifies that load_settings fails fast when api_token mode is
@@ -97,9 +93,7 @@ def test_api_token_mode_missing_email_raises(
         load_settings()
 
 
-def test_api_token_mode_missing_token_raises(
-    monkeypatch: pytest.MonkeyPatch, tmp_path
-) -> None:
+def test_api_token_mode_missing_token_raises(monkeypatch: pytest.MonkeyPatch, tmp_path) -> None:
     """Raise a clear ValueError when JIRA_API_TOKEN is missing (FR-103, FR-203).
 
     Verifies that load_settings fails fast when api_token mode is
@@ -116,9 +110,7 @@ def test_api_token_mode_missing_token_raises(
         load_settings()
 
 
-def test_oauth_mode_names_missing_variables(
-    monkeypatch: pytest.MonkeyPatch, tmp_path
-) -> None:
+def test_oauth_mode_names_missing_variables(monkeypatch: pytest.MonkeyPatch, tmp_path) -> None:
     """Name every missing OAuth variable in the error (FR-103, FR-203).
 
     Verifies that oauth mode raises ValueError listing each missing

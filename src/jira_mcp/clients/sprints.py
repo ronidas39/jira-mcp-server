@@ -93,9 +93,7 @@ class SprintClient:
         raw_pages = await self._paginate("/rest/agile/1.0/board", params)
         return [Board.model_validate(_flatten_board(item)) for item in raw_pages]
 
-    async def list_sprints(
-        self, board_id: int, state: str | None = None
-    ) -> list[Sprint]:
+    async def list_sprints(self, board_id: int, state: str | None = None) -> list[Sprint]:
         """List sprints on a board, optionally filtered by state.
 
         Args:
@@ -137,9 +135,7 @@ class SprintClient:
         raw_issues = body.get("issues") or []
         return [_summary_from_issue(item) for item in raw_issues]
 
-    async def move_to_sprint(
-        self, issue_keys: list[str], sprint_id: int
-    ) -> dict[str, int]:
+    async def move_to_sprint(self, issue_keys: list[str], sprint_id: int) -> dict[str, int]:
         """Move issues into a sprint, batching at the API's 50-key ceiling.
 
         Args:
@@ -190,9 +186,7 @@ class SprintClient:
             issues=issues,
         )
 
-    async def _paginate(
-        self, path: str, params: dict[str, Any]
-    ) -> list[dict[str, Any]]:
+    async def _paginate(self, path: str, params: dict[str, Any]) -> list[dict[str, Any]]:
         """Walk ``startAt``/``isLast`` pagination and return every value.
 
         Defensive against malformed responses: a missing ``isLast`` is

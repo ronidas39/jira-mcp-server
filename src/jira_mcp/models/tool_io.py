@@ -91,9 +91,7 @@ class SearchIssuesOutput(_IOModel):
     issues: list[IssueSummary] = Field(
         description="Matching issues, projected to the summary shape."
     )
-    total: int = Field(
-        description="Total matching issues across all pages, per Jira."
-    )
+    total: int = Field(description="Total matching issues across all pages, per Jira.")
     start_at: int = Field(description="Offset of the first issue in this page.")
     max_results: int = Field(description="Page size that was actually applied.")
 
@@ -101,9 +99,7 @@ class SearchIssuesOutput(_IOModel):
 class GetIssueInput(_IOModel):
     """Inputs for fetching a single issue."""
 
-    key: str = Field(
-        description="Issue key, for example PROJ-123. Case-insensitive in Jira."
-    )
+    key: str = Field(description="Issue key, for example PROJ-123. Case-insensitive in Jira.")
     expand_comments: bool = Field(
         default=False,
         description=(
@@ -139,9 +135,7 @@ class ListProjectsOutput(_IOModel):
 class GetProjectInput(_IOModel):
     """Inputs for fetching a single project."""
 
-    key_or_id: str = Field(
-        description="Project key (e.g. PROJ) or numeric id; both are accepted."
-    )
+    key_or_id: str = Field(description="Project key (e.g. PROJ) or numeric id; both are accepted.")
 
 
 class GetProjectOutput(_IOModel):
@@ -288,9 +282,7 @@ class GetSprintOutput(_IOModel):
 class MoveToSprintInput(_IOModel):
     """Inputs for moving issues into a sprint."""
 
-    sprint_id: int = Field(
-        description="Target sprint id; the agile API accepts numeric ids only."
-    )
+    sprint_id: int = Field(description="Target sprint id; the agile API accepts numeric ids only.")
     issue_keys: list[str] = Field(
         min_length=1,
         description=(
@@ -304,9 +296,7 @@ class MoveToSprintInput(_IOModel):
 class MoveToSprintOutput(_IOModel):
     """Result of a sprint-move operation."""
 
-    moved_count: int = Field(
-        description="Total number of issues Jira accepted across all batches."
-    )
+    moved_count: int = Field(description="Total number of issues Jira accepted across all batches.")
 
 
 class SprintReportInput(_IOModel):
@@ -336,9 +326,7 @@ class SprintReportOutput(_IOModel):
         ),
     )
     delivered: int = Field(
-        description=(
-            "Issues whose status category is 'done' at the time of fetch."
-        ),
+        description=("Issues whose status category is 'done' at the time of fetch."),
     )
     at_risk: int = Field(
         description=(
@@ -427,12 +415,8 @@ class SprintVelocity(_IOModel):
     """Velocity for a single sprint."""
 
     sprint: Sprint = Field(description="The sprint being measured.")
-    completed_points: float = Field(
-        description="Story points completed in this sprint."
-    )
-    committed_points: float = Field(
-        description="Story points committed at sprint start."
-    )
+    completed_points: float = Field(description="Story points completed in this sprint.")
+    committed_points: float = Field(description="Story points committed at sprint start.")
 
 
 class VelocityOutput(_IOModel):
@@ -489,9 +473,7 @@ class CreateIssueInput(_IOModel):
         min_length=1,
         description="One-line title shown in lists and the issue header.",
     )
-    issue_type: str = Field(
-        description="Issue type name, e.g. 'Bug', 'Story', 'Task'."
-    )
+    issue_type: str = Field(description="Issue type name, e.g. 'Bug', 'Story', 'Task'.")
     description: str | None = Field(
         default=None,
         description=(
@@ -566,9 +548,7 @@ class UpdateIssueOutput(_IOModel):
     """Result of an issue update."""
 
     key: str = Field(description="Issue key that was updated.")
-    updated: bool = Field(
-        description="True when Jira accepted the update; false on no-op."
-    )
+    updated: bool = Field(description="True when Jira accepted the update; false on no-op.")
 
 
 class TransitionIssueInput(_IOModel):
@@ -635,9 +615,7 @@ class BulkCreateResultItem(_IOModel):
     """Outcome for a single row in a bulk create."""
 
     index: int = Field(description="Zero-based index in the input list.")
-    key: str | None = Field(
-        default=None, description="Issue key when creation succeeded."
-    )
+    key: str | None = Field(default=None, description="Issue key when creation succeeded.")
     error: str | None = Field(
         default=None, description="Human-readable error when creation failed."
     )

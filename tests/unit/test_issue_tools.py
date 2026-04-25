@@ -69,9 +69,7 @@ async def test_create_issue_records_audit_row(
     issue_ctx_allow_delete: IssueToolContext,
 ) -> None:
     """create_issue writes one audit row with the documented shape."""
-    mock_jira_http.post(
-        "https://example.atlassian.net/rest/api/3/issue"
-    ).mock(
+    mock_jira_http.post("https://example.atlassian.net/rest/api/3/issue").mock(
         return_value=httpx.Response(
             201,
             json={
@@ -134,9 +132,9 @@ async def test_delete_issue_runs_when_enabled(
     issue_ctx_allow_delete: IssueToolContext,
 ) -> None:
     """delete_issue posts the DELETE call and writes an audit row when enabled."""
-    mock_jira_http.delete(
-        "https://example.atlassian.net/rest/api/3/issue/PROJ-9"
-    ).mock(return_value=httpx.Response(204))
+    mock_jira_http.delete("https://example.atlassian.net/rest/api/3/issue/PROJ-9").mock(
+        return_value=httpx.Response(204)
+    )
 
     out = await _dispatch(issue_ctx_allow_delete, "delete_issue", {"key": "PROJ-9"})
     assert out["key"] == "PROJ-9"

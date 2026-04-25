@@ -219,9 +219,7 @@ class Issue(BaseModel):
         fields = payload.get("fields") or {}
         comments_block = fields.get("comment") or {}
         comments_raw = (
-            comments_block.get("comments")
-            if isinstance(comments_block, dict)
-            else comments_block
+            comments_block.get("comments") if isinstance(comments_block, dict) else comments_block
         ) or []
         merged: dict[str, Any] = {
             "id": payload.get("id"),

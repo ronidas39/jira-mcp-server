@@ -142,35 +142,25 @@ def _hash_input(payload: dict[str, Any]) -> str:
     return hashlib.sha256(serialised.encode("utf-8")).hexdigest()
 
 
-async def _list_boards_handler(
-    args: dict[str, Any], client: SprintClient
-) -> dict[str, Any]:
+async def _list_boards_handler(args: dict[str, Any], client: SprintClient) -> dict[str, Any]:
     payload = ListBoardsInput.model_validate(args)
     boards = await client.list_boards(project_key=payload.project_key)
     return ListBoardsOutput(boards=boards).model_dump(mode="json", by_alias=True)
 
 
-async def _list_sprints_handler(
-    args: dict[str, Any], client: SprintClient
-) -> dict[str, Any]:
+async def _list_sprints_handler(args: dict[str, Any], client: SprintClient) -> dict[str, Any]:
     payload = ListSprintsInput.model_validate(args)
-    sprints = await client.list_sprints(
-        board_id=payload.board_id, state=payload.state
-    )
+    sprints = await client.list_sprints(board_id=payload.board_id, state=payload.state)
     return ListSprintsOutput(sprints=sprints).model_dump(mode="json", by_alias=True)
 
 
-async def _get_sprint_handler(
-    args: dict[str, Any], client: SprintClient
-) -> dict[str, Any]:
+async def _get_sprint_handler(args: dict[str, Any], client: SprintClient) -> dict[str, Any]:
     payload = GetSprintInput.model_validate(args)
     sprint = await client.get_sprint(payload.sprint_id)
     return GetSprintOutput(sprint=sprint).model_dump(mode="json", by_alias=True)
 
 
-async def _sprint_report_handler(
-    args: dict[str, Any], client: SprintClient
-) -> dict[str, Any]:
+async def _sprint_report_handler(args: dict[str, Any], client: SprintClient) -> dict[str, Any]:
     payload = SprintReportInput.model_validate(args)
     report = await client.sprint_report(payload.sprint_id)
     return report.model_dump(mode="json", by_alias=True)
@@ -219,9 +209,7 @@ async def _move_to_sprint_handler(
     return MoveToSprintOutput(moved_count=moved).model_dump(mode="json", by_alias=True)
 
 
-def build_sprint_dispatch(
-    client: SprintClient, audit: AuditRepository
-) -> dict[str, Handler]:
+def build_sprint_dispatch(client: SprintClient, audit: AuditRepository) -> dict[str, Handler]:
     """Return the ``name -> handler`` map the server dispatch uses.
 
     Args:
@@ -270,9 +258,7 @@ class SprintToolContext:
     audit: AuditRepository
 
 
-def register(
-    server: object, ctx: SprintToolContext
-) -> dict[str, tuple[types.Tool, Handler]]:
+def register(server: object, ctx: SprintToolContext) -> dict[str, tuple[types.Tool, Handler]]:
     """Build the sprint tool registry the bootstrap installs on the server.
 
     The MCP SDK ``Server`` only allows a single ``list_tools`` and

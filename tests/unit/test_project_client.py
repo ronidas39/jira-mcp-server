@@ -40,15 +40,11 @@ async def test_list_projects_falls_back_to_search_when_truncated(
     Why this test matters: Jira silently caps the simple list at 50; without
     the fallback, large tenants would lose projects.
     """
-    fifty = [
-        {"id": str(i), "key": f"P{i}", "name": f"Project {i}"} for i in range(50)
-    ]
+    fifty = [{"id": str(i), "key": f"P{i}", "name": f"Project {i}"} for i in range(50)]
     mock_jira_http.get(f"{JIRA_BASE_URL}/rest/api/3/project").mock(
         return_value=httpx.Response(200, json=fifty)
     )
-    page_one = [
-        {"id": str(i + 100), "key": f"Q{i}", "name": f"Project {i}"} for i in range(50)
-    ]
+    page_one = [{"id": str(i + 100), "key": f"Q{i}", "name": f"Project {i}"} for i in range(50)]
     page_two = [{"id": "200", "key": "ZED", "name": "Tail"}]
     mock_jira_http.get(f"{JIRA_BASE_URL}/rest/api/3/project/search").mock(
         side_effect=[

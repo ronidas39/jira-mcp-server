@@ -28,9 +28,7 @@ Bound by the auth middleware once that exists; until then every record
 carries the default ``"unknown"`` value.
 """
 
-correlation_id_var: ContextVar[str | None] = ContextVar(
-    "correlation_id_var", default=None
-)
+correlation_id_var: ContextVar[str | None] = ContextVar("correlation_id_var", default=None)
 """Per-request correlation id, propagated across log lines and audit rows.
 
 ``None`` means "no caller-supplied id"; the helper below mints a fresh hex

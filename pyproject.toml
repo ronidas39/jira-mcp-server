@@ -99,8 +99,22 @@ disallow_untyped_decorators = false  # MCP SDK decorators
 plugins = ["pydantic.mypy"]
 
 [[tool.mypy.overrides]]
-module = ["motor.*", "respx.*", "mongomock_motor.*"]
+module = ["motor.*", "respx.*", "mongomock_motor.*", "aiofiles", "aiofiles.*"]
 ignore_missing_imports = true
+
+# The mcp SDK exposes server-registration as untyped decorators
+# (`@server.list_tools()`, `@server.call_tool()`, and the resource and
+# prompt equivalents). They cannot be sensibly typed at the call site, so
+# disable the related strict checks for the modules that use them.
+[[tool.mypy.overrides]]
+module = [
+  "jira_mcp.tools",
+  "jira_mcp.tools.*",
+  "jira_mcp.resources.*",
+  "jira_mcp.prompts.*",
+]
+disallow_untyped_calls = false
+disallow_untyped_decorators = false
 
 # -----------------------------------------------------------------------------
 # Pytest

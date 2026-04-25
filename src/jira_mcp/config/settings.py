@@ -112,6 +112,6 @@ class Settings(BaseSettings):
 
 def load_settings() -> Settings:
     """Load and validate settings. Call once at startup."""
-    settings = Settings()  # type: ignore[call-arg]
+    settings = Settings()
     settings.assert_auth_complete()
     return settings

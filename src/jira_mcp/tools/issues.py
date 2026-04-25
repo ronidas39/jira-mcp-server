@@ -200,9 +200,7 @@ _WRITE_TOOLS = {
 }
 
 
-async def _dispatch(
-    ctx: IssueToolContext, name: str, arguments: dict[str, Any]
-) -> dict[str, Any]:
+async def _dispatch(ctx: IssueToolContext, name: str, arguments: dict[str, Any]) -> dict[str, Any]:
     """Route a validated tool call to the right handler.
 
     Audit rows are written for every write tool, even on failure: a tool
@@ -335,9 +333,7 @@ async def _h_list_transitions(ctx: IssueToolContext, raw: dict[str, Any]) -> dic
 
 async def _h_delete(ctx: IssueToolContext, raw: dict[str, Any]) -> dict[str, Any]:
     if not ctx.settings.allow_delete_issues:
-        raise PermissionError(
-            "delete_issue is disabled; set allow_delete_issues=true to enable."
-        )
+        raise PermissionError("delete_issue is disabled; set allow_delete_issues=true to enable.")
     p = GetIssueInput.model_validate(raw)
     await ctx.issues.delete(p.key)
     return UpdateIssueOutput(key=p.key, updated=True).model_dump(mode="json", by_alias=True)

@@ -19,7 +19,7 @@ from __future__ import annotations
 import asyncio
 from typing import Any
 
-from ..models.jira_entities import Issue, Transition
+from ..models.jira_entities import Issue, IssueSummary, Transition
 from ..models.tool_io import (
     AddCommentOutput,
     BulkCreateIssueItem,
@@ -27,7 +27,6 @@ from ..models.tool_io import (
     BulkCreateResultItem,
     CreateIssueInput,
     CreateIssueOutput,
-    IssueSummary,
     LinkIssuesOutput,
     ListTransitionsOutput,
     SearchIssuesOutput,
@@ -273,15 +272,11 @@ class IssueClient:
         """
         body: dict[str, Any] = {"transition": {"id": transition_id}}
         if comment:
-            body["update"] = {
-                "comment": [{"add": {"body": markdown_to_adf(comment)}}]
-            }
+            body["update"] = {"comment": [{"add": {"body": markdown_to_adf(comment)}}]}
         await self._jira.post(f"/rest/api/3/issue/{key}/transitions", json=body)
         return TransitionIssueOutput(key=key, new_status=None)
 
-    async def bulk_create(
-        self, issues: list[BulkCreateItem]
-    ) -> BulkCreateIssuesOutput:
+    async def bulk_create(self, issues: list[BulkCreateItem]) -> BulkCreateIssuesOutput:
         """Create up to :data:`_BULK_CREATE_CAP` issues in one call.
 
         On a fully successful bulk POST, every row is reported as a success.
@@ -290,17 +285,13 @@ class IssueClient:
         preserved and individual error messages are reported back.
         """
         capped = list(issues)[:_BULK_CREATE_CAP]
-        body = {
-            "issueUpdates": [{"fields": _build_create_fields(item)} for item in capped]
-        }
+        body = {"issueUpdates": [{"fields": _build_create_fields(item)} for item in capped]}
         resp = await self._jira.post("/rest/api/3/issue/bulk", json=body)
         errors = resp.get("errors") or []
         created = resp.get("issues") or []
         if not errors and len(created) == len(capped):
             results = [
-                BulkCreateResultItem(
-                    index=i, key=str(created[i].get("key", "")), error=None
-                )
+                BulkCreateResultItem(index=i, key=str(created[i].get("key", "")), error=None)
                 for i in range(len(capped))
             ]
             return BulkCreateIssuesOutput(results=results)
@@ -325,25 +316,19 @@ class IssueClient:
                     return BulkCreateResultItem(index=idx, key=None, error=str(exc))
                 return BulkCreateResultItem(index=idx, key=out.key, error=None)
 
-        results = await asyncio.gather(
-            *[_one(i, it) for i, it in enumerate(items)]
-        )
+        results = await asyncio.gather(*[_one(i, it) for i, it in enumerate(items)])
         return BulkCreateIssuesOutput(results=list(results))
 
     async def add_comment(self, key: str, body: str) -> AddCommentOutput:
         """Append an ADF-wrapped comment to an issue."""
         payload = {"body": markdown_to_adf(body)}
-        resp = await self._jira.post(
-            f"/rest/api/3/issue/{key}/comment", json=payload
-        )
+        resp = await self._jira.post(f"/rest/api/3/issue/{key}/comment", json=payload)
         return AddCommentOutput(
             id=str(resp.get("id", "")),
             created=resp.get("created"),
         )
 
-    async def link(
-        self, from_key: str, to_key: str, link_type: str
-    ) -> LinkIssuesOutput:
+    async def link(self, from_key: str, to_key: str, link_type: str) -> LinkIssuesOutput:
         """Create an issue link of the given type.
 
         Args:

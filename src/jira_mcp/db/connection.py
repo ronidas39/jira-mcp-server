@@ -11,6 +11,8 @@ container images and developer laptops without extra environment plumbing.
 
 from __future__ import annotations
 
+from typing import Any
+
 import certifi
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
 
@@ -19,18 +21,18 @@ class MongoConnection:
     """Holds a single Motor client plus a database handle."""
 
     def __init__(self, uri: str, db_name: str) -> None:
-        self._client: AsyncIOMotorClient | None = None
+        self._client: AsyncIOMotorClient[Any] | None = None
         self._uri = uri
         self._db_name = db_name
 
     @property
-    def client(self) -> AsyncIOMotorClient:
+    def client(self) -> AsyncIOMotorClient[Any]:
         if self._client is None:
-            self._client = AsyncIOMotorClient(self._uri, tlsCAFile=certifi.where())
+            self._client = AsyncIOMotorClient[Any](self._uri, tlsCAFile=certifi.where())
         return self._client
 
     @property
-    def db(self) -> AsyncIOMotorDatabase:
+    def db(self) -> AsyncIOMotorDatabase[Any]:
         return self.client[self._db_name]
 
     async def ping(self) -> None:

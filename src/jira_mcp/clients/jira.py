@@ -8,6 +8,11 @@ helpers live in sibling modules (`issues.py`, `sprints.py`, ...) and consume a
 Transient errors (429 and 5xx) are handled by the ``retry_jira_request``
 decorator on ``request``; the per-status mapping below converts non-2xx
 responses into typed exceptions before the retry layer decides what to do.
+
+For OAuth deployments the base URL is the per-tenant proxy on
+``api.atlassian.com/ex/jira/{cloudId}`` rather than the customer's
+``*.atlassian.net`` host. The ``oauth_base_url`` helper centralises that
+construction so the bootstrap does not have to know the URL shape.
 """
 
 from __future__ import annotations
@@ -26,6 +31,26 @@ from ..utils.errors import (
     UpstreamError,
 )
 from ..utils.retry import retry_jira_request
+
+# Atlassian's OAuth-mode REST proxy. Per-tenant calls go to
+# ``{OAUTH_API_HOST}/ex/jira/{cloudId}`` rather than the customer's own
+# ``*.atlassian.net`` URL.
+OAUTH_API_HOST = "https://api.atlassian.com"
+
+
+def oauth_base_url(cloud_id: str) -> str:
+    """Build the per-tenant Jira REST base URL for OAuth deployments.
+
+    Args:
+        cloud_id: The Atlassian Cloud tenant identifier returned by
+            ``/oauth/token/accessible-resources``.
+
+    Returns:
+        The base URL that the ``JiraClient`` should be configured with when
+        the auth provider is an ``OAuthProvider``. The trailing slash is
+        omitted so existing path joins (which prepend ``/``) keep working.
+    """
+    return f"{OAUTH_API_HOST}/ex/jira/{cloud_id}"
 
 
 class JiraClient:
@@ -65,9 +90,7 @@ class JiraClient:
         """
         headers = await self._auth.headers()
         url = f"{self._base_url}{path}"
-        resp = await self._http.request(
-            method, url, json=json, params=params, headers=headers
-        )
+        resp = await self._http.request(method, url, json=json, params=params, headers=headers)
         status = resp.status_code
         if status == HTTPStatus.UNAUTHORIZED:
             raise AuthenticationError("Jira rejected credentials (401).")
@@ -94,3 +117,6 @@ class JiraClient:
 
     async def delete(self, path: str, **kwargs: Any) -> dict[str, Any]:
         return await self.request("DELETE", path, **kwargs)
+
+
+__all__ = ["OAUTH_API_HOST", "JiraClient", "oauth_base_url"]
