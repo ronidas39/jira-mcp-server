@@ -147,7 +147,7 @@ async def _list_boards_handler(
 ) -> dict[str, Any]:
     payload = ListBoardsInput.model_validate(args)
     boards = await client.list_boards(project_key=payload.project_key)
-    return ListBoardsOutput(boards=boards).model_dump(mode="json")
+    return ListBoardsOutput(boards=boards).model_dump(mode="json", by_alias=True)
 
 
 async def _list_sprints_handler(
@@ -157,7 +157,7 @@ async def _list_sprints_handler(
     sprints = await client.list_sprints(
         board_id=payload.board_id, state=payload.state
     )
-    return ListSprintsOutput(sprints=sprints).model_dump(mode="json")
+    return ListSprintsOutput(sprints=sprints).model_dump(mode="json", by_alias=True)
 
 
 async def _get_sprint_handler(
@@ -165,7 +165,7 @@ async def _get_sprint_handler(
 ) -> dict[str, Any]:
     payload = GetSprintInput.model_validate(args)
     sprint = await client.get_sprint(payload.sprint_id)
-    return GetSprintOutput(sprint=sprint).model_dump(mode="json")
+    return GetSprintOutput(sprint=sprint).model_dump(mode="json", by_alias=True)
 
 
 async def _sprint_report_handler(
@@ -173,7 +173,7 @@ async def _sprint_report_handler(
 ) -> dict[str, Any]:
     payload = SprintReportInput.model_validate(args)
     report = await client.sprint_report(payload.sprint_id)
-    return report.model_dump(mode="json")
+    return report.model_dump(mode="json", by_alias=True)
 
 
 async def _move_to_sprint_handler(
@@ -205,7 +205,7 @@ async def _move_to_sprint_handler(
         duration_ms = int((time.perf_counter() - started) * 1000)
         await audit.record(
             tool="move_to_sprint",
-            input_hash=_hash_input(payload.model_dump(mode="json")),
+            input_hash=_hash_input(payload.model_dump(mode="json", by_alias=True)),
             input_summary={
                 "sprint_id": payload.sprint_id,
                 "issue_keys": payload.issue_keys,
@@ -216,7 +216,7 @@ async def _move_to_sprint_handler(
             duration_ms=duration_ms,
             correlation_id=correlation_id,
         )
-    return MoveToSprintOutput(moved_count=moved).model_dump(mode="json")
+    return MoveToSprintOutput(moved_count=moved).model_dump(mode="json", by_alias=True)
 
 
 def build_sprint_dispatch(

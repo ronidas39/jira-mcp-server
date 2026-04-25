@@ -51,12 +51,12 @@ def _build_handlers(client: UserClient) -> dict[str, ToolEntry]:
         # ``max_results`` is a client-side cap because the directory search
         # endpoint does not honour ``maxResults`` consistently across tenants.
         capped = users[: params.max_results]
-        return ListUsersOutput(users=capped).model_dump(mode="json")
+        return ListUsersOutput(users=capped).model_dump(mode="json", by_alias=True)
 
     async def resolve_user_handler(args: dict[str, Any]) -> dict[str, Any]:
         params = ResolveUserInput.model_validate(args)
         user = await client.resolve(params.identifier)
-        return ResolveUserOutput(user=user).model_dump(mode="json")
+        return ResolveUserOutput(user=user).model_dump(mode="json", by_alias=True)
 
     return {
         "list_users": (

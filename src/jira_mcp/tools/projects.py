@@ -48,16 +48,16 @@ def _build_handlers(client: ProjectClient) -> dict[str, ToolEntry]:
 
     async def list_projects_handler(_args: dict[str, Any]) -> dict[str, Any]:
         projects = await client.list_projects()
-        return ListProjectsOutput(projects=projects).model_dump(mode="json")
+        return ListProjectsOutput(projects=projects).model_dump(mode="json", by_alias=True)
 
     async def get_project_handler(args: dict[str, Any]) -> dict[str, Any]:
         params = GetProjectInput.model_validate(args)
         project = await client.get(params.key_or_id)
-        return GetProjectOutput(project=project).model_dump(mode="json")
+        return GetProjectOutput(project=project).model_dump(mode="json", by_alias=True)
 
     async def list_custom_fields_handler(_args: dict[str, Any]) -> dict[str, Any]:
         result = await client.list_custom_fields()
-        return result.model_dump(mode="json")
+        return result.model_dump(mode="json", by_alias=True)
 
     return {
         "list_projects": (

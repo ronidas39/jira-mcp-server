@@ -258,7 +258,7 @@ async def _h_search(ctx: IssueToolContext, raw: dict[str, Any]) -> dict[str, Any
     out = await ctx.issues.search(
         jql=p.jql, max_results=p.max_results, fields=p.fields, start_at=p.start_at
     )
-    return out.model_dump(mode="json")
+    return out.model_dump(mode="json", by_alias=True)
 
 
 async def _h_get(ctx: IssueToolContext, raw: dict[str, Any]) -> dict[str, Any]:
@@ -269,12 +269,12 @@ async def _h_get(ctx: IssueToolContext, raw: dict[str, Any]) -> dict[str, Any]:
     if p.expand_transitions:
         expand.append("transitions")
     issue = await ctx.issues.get(p.key, expand=expand or None)
-    return GetIssueOutput(issue=issue).model_dump(mode="json")
+    return GetIssueOutput(issue=issue).model_dump(mode="json", by_alias=True)
 
 
 async def _h_create(ctx: IssueToolContext, raw: dict[str, Any]) -> dict[str, Any]:
     out = await ctx.issues.create(CreateIssueInput.model_validate(raw))
-    return out.model_dump(mode="json")
+    return out.model_dump(mode="json", by_alias=True)
 
 
 def _build_update_fields(p: UpdateIssueInput) -> dict[str, Any]:
@@ -300,37 +300,37 @@ def _build_update_fields(p: UpdateIssueInput) -> dict[str, Any]:
 async def _h_update(ctx: IssueToolContext, raw: dict[str, Any]) -> dict[str, Any]:
     p = UpdateIssueInput.model_validate(raw)
     out = await ctx.issues.update(p.key, _build_update_fields(p))
-    return out.model_dump(mode="json")
+    return out.model_dump(mode="json", by_alias=True)
 
 
 async def _h_transition(ctx: IssueToolContext, raw: dict[str, Any]) -> dict[str, Any]:
     p = TransitionIssueInput.model_validate(raw)
     out = await ctx.issues.transition(key=p.key, transition_id=p.transition_id, comment=p.comment)
-    return out.model_dump(mode="json")
+    return out.model_dump(mode="json", by_alias=True)
 
 
 async def _h_bulk_create(ctx: IssueToolContext, raw: dict[str, Any]) -> dict[str, Any]:
     p = BulkCreateIssuesInput.model_validate(raw)
     out = await ctx.issues.bulk_create(list(p.issues))
-    return out.model_dump(mode="json")
+    return out.model_dump(mode="json", by_alias=True)
 
 
 async def _h_add_comment(ctx: IssueToolContext, raw: dict[str, Any]) -> dict[str, Any]:
     p = AddCommentInput.model_validate(raw)
     out = await ctx.issues.add_comment(p.key, p.body)
-    return out.model_dump(mode="json")
+    return out.model_dump(mode="json", by_alias=True)
 
 
 async def _h_link(ctx: IssueToolContext, raw: dict[str, Any]) -> dict[str, Any]:
     p = LinkIssuesInput.model_validate(raw)
     out = await ctx.issues.link(from_key=p.inward_key, to_key=p.outward_key, link_type=p.link_type)
-    return out.model_dump(mode="json")
+    return out.model_dump(mode="json", by_alias=True)
 
 
 async def _h_list_transitions(ctx: IssueToolContext, raw: dict[str, Any]) -> dict[str, Any]:
     p = ListTransitionsInput.model_validate(raw)
     out = await ctx.issues.list_transitions(p.key)
-    return out.model_dump(mode="json")
+    return out.model_dump(mode="json", by_alias=True)
 
 
 async def _h_delete(ctx: IssueToolContext, raw: dict[str, Any]) -> dict[str, Any]:
@@ -340,7 +340,7 @@ async def _h_delete(ctx: IssueToolContext, raw: dict[str, Any]) -> dict[str, Any
         )
     p = GetIssueInput.model_validate(raw)
     await ctx.issues.delete(p.key)
-    return UpdateIssueOutput(key=p.key, updated=True).model_dump(mode="json")
+    return UpdateIssueOutput(key=p.key, updated=True).model_dump(mode="json", by_alias=True)
 
 
 _HandlerType = Callable[[IssueToolContext, dict[str, Any]], Awaitable[dict[str, Any]]]
