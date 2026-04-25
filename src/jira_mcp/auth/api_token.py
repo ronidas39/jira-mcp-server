@@ -30,9 +30,8 @@ class ApiTokenAuth:
             "Accept": "application/json",
         }
 
-    async def refresh(self) -> None:  # noqa: D401  # static token, nothing to do
+    async def refresh(self) -> None:
         """Static token: nothing to refresh."""
-        return None
 
 
 # Compile-time check that ApiTokenAuth satisfies the AuthProvider Protocol.

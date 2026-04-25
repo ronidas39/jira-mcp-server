@@ -5,13 +5,14 @@ conventions, but not about issues, sprints, or projects. Domain-specific
 helpers live in sibling modules (`issues.py`, `sprints.py`, ...) and consume a
 `JiraClient` instance.
 
-The retry layer for 429 and 5xx responses is intentionally not in here yet; it
-lands in M1 alongside the higher-level helpers, so the test surface stays
-small while we shake out the auth flow.
+Transient errors (429 and 5xx) are handled by the ``retry_jira_request``
+decorator on ``request``; the per-status mapping below converts non-2xx
+responses into typed exceptions before the retry layer decides what to do.
 """
 
 from __future__ import annotations
 
+from http import HTTPStatus
 from typing import Any
 
 import httpx
@@ -24,6 +25,7 @@ from ..utils.errors import (
     RateLimitError,
     UpstreamError,
 )
+from ..utils.retry import retry_jira_request
 
 
 class JiraClient:
@@ -41,6 +43,7 @@ class JiraClient:
         self._http = http
         self._max_retries = max_retries
 
+    @retry_jira_request
     async def request(
         self,
         method: str,
@@ -55,23 +58,28 @@ class JiraClient:
         decide their own policy (retry, surface to the user, swallow). The
         response body is included in the error so the model gets enough
         context to explain the failure without having to re-issue the call.
+
+        The ``retry_jira_request`` decorator transparently retries 429 and
+        5xx responses with exponential backoff; the public signature is
+        unchanged so callers do not need to know about the retry layer.
         """
         headers = await self._auth.headers()
         url = f"{self._base_url}{path}"
         resp = await self._http.request(
             method, url, json=json, params=params, headers=headers
         )
-        if resp.status_code == 401:
+        status = resp.status_code
+        if status == HTTPStatus.UNAUTHORIZED:
             raise AuthenticationError("Jira rejected credentials (401).")
-        if resp.status_code == 404:
-            raise NotFoundError(404, resp.text, "Resource not found.")
-        if resp.status_code == 429:
-            raise RateLimitError(429, resp.text, "Rate limited by Jira.")
-        if resp.status_code >= 500:
-            raise UpstreamError(resp.status_code, resp.text, "Jira upstream error.")
-        if resp.status_code >= 400:
-            raise JiraApiError(resp.status_code, resp.text)
-        if resp.status_code == 204 or not resp.content:
+        if status == HTTPStatus.NOT_FOUND:
+            raise NotFoundError(status, resp.text, "Resource not found.")
+        if status == HTTPStatus.TOO_MANY_REQUESTS:
+            raise RateLimitError(status, resp.text, "Rate limited by Jira.")
+        if status >= HTTPStatus.INTERNAL_SERVER_ERROR:
+            raise UpstreamError(status, resp.text, "Jira upstream error.")
+        if status >= HTTPStatus.BAD_REQUEST:
+            raise JiraApiError(status, resp.text)
+        if status == HTTPStatus.NO_CONTENT or not resp.content:
             return {}
         return resp.json()  # type: ignore[no-any-return]
 
