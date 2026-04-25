@@ -1,0 +1,50 @@
+[
+  {
+    "self": "https://example.atlassian.net/rest/api/3/project/10000",
+    "id": "10000",
+    "key": "PROJ",
+    "name": "Platform",
+    "projectTypeKey": "software",
+    "simplified": false,
+    "style": "classic",
+    "isPrivate": false,
+    "avatarUrls": {
+      "48x48": "https://example.atlassian.net/secure/projectavatar?size=large&pid=10000",
+      "24x24": "https://example.atlassian.net/secure/projectavatar?size=small&pid=10000",
+      "16x16": "https://example.atlassian.net/secure/projectavatar?size=xsmall&pid=10000",
+      "32x32": "https://example.atlassian.net/secure/projectavatar?size=medium&pid=10000"
+    }
+  },
+  {
+    "self": "https://example.atlassian.net/rest/api/3/project/10001",
+    "id": "10001",
+    "key": "DOCS",
+    "name": "Documentation",
+    "projectTypeKey": "business",
+    "simplified": true,
+    "style": "next-gen",
+    "isPrivate": false,
+    "avatarUrls": {
+      "48x48": "https://example.atlassian.net/secure/projectavatar?size=large&pid=10001",
+      "24x24": "https://example.atlassian.net/secure/projectavatar?size=small&pid=10001",
+      "16x16": "https://example.atlassian.net/secure/projectavatar?size=xsmall&pid=10001",
+      "32x32": "https://example.atlassian.net/secure/projectavatar?size=medium&pid=10001"
+    }
+  },
+  {
+    "self": "https://example.atlassian.net/rest/api/3/project/10002",
+    "id": "10002",
+    "key": "OPS",
+    "name": "Operations",
+    "projectTypeKey": "service_desk",
+    "simplified": true,
+    "style": "next-gen",
+    "isPrivate": false,
+    "avatarUrls": {
+      "48x48": "https://example.atlassian.net/secure/projectavatar?size=large&pid=10002",
+      "24x24": "https://example.atlassian.net/secure/projectavatar?size=small&pid=10002",
+      "16x16": "https://example.atlassian.net/secure/projectavatar?size=xsmall&pid=10002",
+      "32x32": "https://example.atlassian.net/secure/projectavatar?size=medium&pid=10002"
+    }
+  }
+]

@@ -1,0 +1,88 @@
+{
+  "expand": "description,lead,issueTypes,url,projectKeys,permissions,insight",
+  "self": "https://example.atlassian.net/rest/api/3/project/10000",
+  "id": "10000",
+  "key": "PROJ",
+  "name": "Platform",
+  "description": "Platform engineering work; pipelines, infra, internal tools.",
+  "lead": {
+    "self": "https://example.atlassian.net/rest/api/3/user?accountId=557058:def-2222",
+    "accountId": "557058:def-2222",
+    "accountType": "atlassian",
+    "displayName": "Bob Manager",
+    "active": true
+  },
+  "components": [
+    {
+      "self": "https://example.atlassian.net/rest/api/3/component/10101",
+      "id": "10101",
+      "name": "sync-worker",
+      "description": "Polls Jira on a schedule."
+    }
+  ],
+  "issueTypes": [
+    {
+      "self": "https://example.atlassian.net/rest/api/3/issuetype/10000",
+      "id": "10000",
+      "description": "A big user story.",
+      "iconUrl": "https://example.atlassian.net/rest/api/3/universal_avatar/view/type/issuetype/avatar/10315",
+      "name": "Epic",
+      "subtask": false,
+      "hierarchyLevel": 1
+    },
+    {
+      "self": "https://example.atlassian.net/rest/api/3/issuetype/10001",
+      "id": "10001",
+      "description": "A small piece of work that's part of a larger task.",
+      "iconUrl": "https://example.atlassian.net/rest/api/3/universal_avatar/view/type/issuetype/avatar/10316",
+      "name": "Story",
+      "subtask": false,
+      "hierarchyLevel": 0
+    },
+    {
+      "self": "https://example.atlassian.net/rest/api/3/issuetype/10002",
+      "id": "10002",
+      "description": "A task that needs to be done.",
+      "iconUrl": "https://example.atlassian.net/rest/api/3/universal_avatar/view/type/issuetype/avatar/10318",
+      "name": "Task",
+      "subtask": false,
+      "hierarchyLevel": 0
+    },
+    {
+      "self": "https://example.atlassian.net/rest/api/3/issuetype/10003",
+      "id": "10003",
+      "description": "A problem which impairs or prevents the functions of the product.",
+      "iconUrl": "https://example.atlassian.net/rest/api/3/universal_avatar/view/type/issuetype/avatar/10303",
+      "name": "Bug",
+      "subtask": false,
+      "hierarchyLevel": 0
+    },
+    {
+      "self": "https://example.atlassian.net/rest/api/3/issuetype/10004",
+      "id": "10004",
+      "description": "A subtask of a parent issue.",
+      "iconUrl": "https://example.atlassian.net/rest/api/3/universal_avatar/view/type/issuetype/avatar/10316",
+      "name": "Sub-task",
+      "subtask": true,
+      "hierarchyLevel": -1
+    }
+  ],
+  "url": "https://example.atlassian.net/jira/software/projects/PROJ",
+  "assigneeType": "PROJECT_LEAD",
+  "versions": [],
+  "roles": {
+    "Administrators": "https://example.atlassian.net/rest/api/3/project/10000/role/10002",
+    "Member": "https://example.atlassian.net/rest/api/3/project/10000/role/10001"
+  },
+  "avatarUrls": {
+    "48x48": "https://example.atlassian.net/secure/projectavatar?size=large&pid=10000",
+    "24x24": "https://example.atlassian.net/secure/projectavatar?size=small&pid=10000",
+    "16x16": "https://example.atlassian.net/secure/projectavatar?size=xsmall&pid=10000",
+    "32x32": "https://example.atlassian.net/secure/projectavatar?size=medium&pid=10000"
+  },
+  "projectTypeKey": "software",
+  "simplified": false,
+  "style": "classic",
+  "isPrivate": false,
+  "properties": {}
+}

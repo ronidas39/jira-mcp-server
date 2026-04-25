@@ -1,0 +1,10 @@
+{
+  "id": 42,
+  "self": "https://example.atlassian.net/rest/agile/1.0/sprint/42",
+  "state": "active",
+  "name": "Sprint 42",
+  "startDate": "2026-04-13T09:00:00.000Z",
+  "endDate": "2026-04-27T09:00:00.000Z",
+  "originBoardId": 7,
+  "goal": "Bring search and transitions tools to parity with the spec."
+}

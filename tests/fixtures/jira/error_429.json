@@ -1,0 +1,8 @@
+{
+  "errorMessages": [
+    "Rate limit exceeded. Retry after 30 seconds."
+  ],
+  "errors": {
+    "retryAfter": "30"
+  }
+}

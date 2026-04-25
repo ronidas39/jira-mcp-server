@@ -1,0 +1,93 @@
+{
+  "expand": "names,schema",
+  "startAt": 0,
+  "maxResults": 50,
+  "total": 3,
+  "issues": [
+    {
+      "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+      "id": "10042",
+      "self": "https://example.atlassian.net/rest/api/3/issue/10042",
+      "key": "PROJ-123",
+      "fields": {
+        "summary": "Persist sprint metadata to MongoDB on every poll",
+        "status": {
+          "name": "In Progress",
+          "statusCategory": {"key": "indeterminate", "colorName": "yellow", "name": "In Progress"}
+        },
+        "issuetype": {"name": "Story", "subtask": false},
+        "priority": {"name": "Medium", "id": "3"},
+        "assignee": {
+          "accountId": "557058:abc-1111",
+          "accountType": "atlassian",
+          "displayName": "Alice Engineer",
+          "active": true
+        },
+        "reporter": {
+          "accountId": "557058:def-2222",
+          "accountType": "atlassian",
+          "displayName": "Bob Manager",
+          "active": true
+        },
+        "created": "2026-04-12T09:14:31.000+0000",
+        "updated": "2026-04-23T16:02:18.000+0000",
+        "labels": ["backend", "persistence"]
+      }
+    },
+    {
+      "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+      "id": "10058",
+      "self": "https://example.atlassian.net/rest/api/3/issue/10058",
+      "key": "PROJ-124",
+      "fields": {
+        "summary": "Add JQL search tool with pagination",
+        "status": {
+          "name": "To Do",
+          "statusCategory": {"key": "new", "colorName": "blue-gray", "name": "To Do"}
+        },
+        "issuetype": {"name": "Task", "subtask": false},
+        "priority": {"name": "High", "id": "2"},
+        "assignee": null,
+        "reporter": {
+          "accountId": "557058:def-2222",
+          "accountType": "atlassian",
+          "displayName": "Bob Manager",
+          "active": true
+        },
+        "created": "2026-04-18T11:00:00.000+0000",
+        "updated": "2026-04-22T08:45:12.000+0000",
+        "labels": ["search"]
+      }
+    },
+    {
+      "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+      "id": "10071",
+      "self": "https://example.atlassian.net/rest/api/3/issue/10071",
+      "key": "PROJ-125",
+      "fields": {
+        "summary": "Wire transitions tool to workflow API",
+        "status": {
+          "name": "Done",
+          "statusCategory": {"key": "done", "colorName": "green", "name": "Done"}
+        },
+        "issuetype": {"name": "Story", "subtask": false},
+        "priority": {"name": "Low", "id": "4"},
+        "assignee": {
+          "accountId": "557058:abc-1111",
+          "accountType": "atlassian",
+          "displayName": "Alice Engineer",
+          "active": true
+        },
+        "reporter": {
+          "accountId": "557058:abc-1111",
+          "accountType": "atlassian",
+          "displayName": "Alice Engineer",
+          "active": true
+        },
+        "created": "2026-04-19T13:30:00.000+0000",
+        "updated": "2026-04-24T17:11:55.000+0000",
+        "labels": ["workflow", "transitions"]
+      }
+    }
+  ]
+}

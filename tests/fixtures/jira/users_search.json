@@ -1,0 +1,34 @@
+[
+  {
+    "self": "https://example.atlassian.net/rest/api/3/user?accountId=557058:abc-1111",
+    "accountId": "557058:abc-1111",
+    "accountType": "atlassian",
+    "emailAddress": "alice@example.com",
+    "avatarUrls": {
+      "48x48": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/initials/AE-1.png",
+      "24x24": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/initials/AE-1.png",
+      "16x16": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/initials/AE-1.png",
+      "32x32": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/initials/AE-1.png"
+    },
+    "displayName": "Alice Engineer",
+    "active": true,
+    "timeZone": "UTC",
+    "locale": "en_US"
+  },
+  {
+    "self": "https://example.atlassian.net/rest/api/3/user?accountId=557058:def-2222",
+    "accountId": "557058:def-2222",
+    "accountType": "atlassian",
+    "emailAddress": "bob@example.com",
+    "avatarUrls": {
+      "48x48": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/initials/BM-2.png",
+      "24x24": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/initials/BM-2.png",
+      "16x16": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/initials/BM-2.png",
+      "32x32": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/initials/BM-2.png"
+    },
+    "displayName": "Bob Manager",
+    "active": true,
+    "timeZone": "UTC",
+    "locale": "en_US"
+  }
+]

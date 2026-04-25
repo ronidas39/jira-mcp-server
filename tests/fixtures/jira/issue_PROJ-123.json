@@ -1,0 +1,199 @@
+{
+  "expand": "renderedFields,names,schema,operations,editmeta,changelog,versionedRepresentations,transitions",
+  "id": "10042",
+  "self": "https://example.atlassian.net/rest/api/3/issue/10042",
+  "key": "PROJ-123",
+  "fields": {
+    "summary": "Persist sprint metadata to MongoDB on every poll",
+    "issuetype": {
+      "self": "https://example.atlassian.net/rest/api/3/issuetype/10001",
+      "id": "10001",
+      "description": "A small piece of work that's part of a larger task.",
+      "iconUrl": "https://example.atlassian.net/rest/api/3/universal_avatar/view/type/issuetype/avatar/10316",
+      "name": "Story",
+      "subtask": false,
+      "avatarId": 10316,
+      "hierarchyLevel": 0
+    },
+    "project": {
+      "self": "https://example.atlassian.net/rest/api/3/project/10000",
+      "id": "10000",
+      "key": "PROJ",
+      "name": "Platform",
+      "projectTypeKey": "software",
+      "simplified": false,
+      "avatarUrls": {
+        "48x48": "https://example.atlassian.net/secure/projectavatar?size=large&pid=10000",
+        "24x24": "https://example.atlassian.net/secure/projectavatar?size=small&pid=10000",
+        "16x16": "https://example.atlassian.net/secure/projectavatar?size=xsmall&pid=10000",
+        "32x32": "https://example.atlassian.net/secure/projectavatar?size=medium&pid=10000"
+      }
+    },
+    "status": {
+      "self": "https://example.atlassian.net/rest/api/3/status/3",
+      "id": "3",
+      "name": "In Progress",
+      "description": "This issue is being actively worked on at the moment by the assignee.",
+      "iconUrl": "https://example.atlassian.net/images/icons/statuses/inprogress.png",
+      "statusCategory": {
+        "self": "https://example.atlassian.net/rest/api/3/statuscategory/4",
+        "id": 4,
+        "key": "indeterminate",
+        "colorName": "yellow",
+        "name": "In Progress"
+      }
+    },
+    "priority": {
+      "self": "https://example.atlassian.net/rest/api/3/priority/3",
+      "iconUrl": "https://example.atlassian.net/images/icons/priorities/medium.svg",
+      "name": "Medium",
+      "id": "3"
+    },
+    "assignee": {
+      "self": "https://example.atlassian.net/rest/api/3/user?accountId=557058:abc-1111",
+      "accountId": "557058:abc-1111",
+      "accountType": "atlassian",
+      "emailAddress": "alice@example.com",
+      "displayName": "Alice Engineer",
+      "active": true,
+      "timeZone": "UTC",
+      "avatarUrls": {
+        "48x48": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/initials/AE-1.png",
+        "24x24": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/initials/AE-1.png",
+        "16x16": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/initials/AE-1.png",
+        "32x32": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/initials/AE-1.png"
+      }
+    },
+    "reporter": {
+      "self": "https://example.atlassian.net/rest/api/3/user?accountId=557058:def-2222",
+      "accountId": "557058:def-2222",
+      "accountType": "atlassian",
+      "emailAddress": "bob@example.com",
+      "displayName": "Bob Manager",
+      "active": true,
+      "timeZone": "UTC"
+    },
+    "created": "2026-04-12T09:14:31.000+0000",
+    "updated": "2026-04-23T16:02:18.000+0000",
+    "duedate": "2026-05-02",
+    "resolution": null,
+    "resolutiondate": null,
+    "labels": ["backend", "persistence"],
+    "components": [
+      {
+        "self": "https://example.atlassian.net/rest/api/3/component/10101",
+        "id": "10101",
+        "name": "sync-worker"
+      }
+    ],
+    "fixVersions": [
+      {
+        "self": "https://example.atlassian.net/rest/api/3/version/10200",
+        "id": "10200",
+        "name": "2026.05",
+        "released": false,
+        "archived": false
+      }
+    ],
+    "description": {
+      "type": "doc",
+      "version": 1,
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "Sprint metadata must be written to MongoDB on each poll cycle so analytics can run offline."
+            }
+          ]
+        }
+      ]
+    },
+    "comment": {
+      "comments": [
+        {
+          "self": "https://example.atlassian.net/rest/api/3/issue/10042/comment/20001",
+          "id": "20001",
+          "author": {
+            "accountId": "557058:def-2222",
+            "accountType": "atlassian",
+            "displayName": "Bob Manager",
+            "active": true
+          },
+          "body": {
+            "type": "doc",
+            "version": 1,
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [{"type": "text", "text": "Please include sprint goal in the document."}]
+              }
+            ]
+          },
+          "created": "2026-04-13T10:01:00.000+0000",
+          "updated": "2026-04-13T10:01:00.000+0000",
+          "jsdPublic": true
+        },
+        {
+          "self": "https://example.atlassian.net/rest/api/3/issue/10042/comment/20002",
+          "id": "20002",
+          "author": {
+            "accountId": "557058:abc-1111",
+            "accountType": "atlassian",
+            "displayName": "Alice Engineer",
+            "active": true
+          },
+          "body": {
+            "type": "doc",
+            "version": 1,
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [{"type": "text", "text": "Done. Pushed schema in PR #214."}]
+              }
+            ]
+          },
+          "created": "2026-04-15T14:22:11.000+0000",
+          "updated": "2026-04-15T14:22:11.000+0000",
+          "jsdPublic": true
+        }
+      ],
+      "maxResults": 2,
+      "total": 2,
+      "startAt": 0
+    }
+  },
+  "transitions": [
+    {
+      "id": "11",
+      "name": "To Do",
+      "to": {
+        "self": "https://example.atlassian.net/rest/api/3/status/1",
+        "id": "1",
+        "name": "To Do",
+        "statusCategory": {"id": 2, "key": "new", "colorName": "blue-gray", "name": "To Do"}
+      },
+      "hasScreen": false,
+      "isGlobal": false,
+      "isInitial": false,
+      "isAvailable": true,
+      "isConditional": false
+    },
+    {
+      "id": "31",
+      "name": "Done",
+      "to": {
+        "self": "https://example.atlassian.net/rest/api/3/status/10001",
+        "id": "10001",
+        "name": "Done",
+        "statusCategory": {"id": 3, "key": "done", "colorName": "green", "name": "Done"}
+      },
+      "hasScreen": false,
+      "isGlobal": false,
+      "isInitial": false,
+      "isAvailable": true,
+      "isConditional": false
+    }
+  ]
+}

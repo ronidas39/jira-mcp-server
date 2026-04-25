@@ -1,0 +1,38 @@
+{
+  "maxResults": 50,
+  "startAt": 0,
+  "total": 2,
+  "isLast": true,
+  "values": [
+    {
+      "id": 7,
+      "self": "https://example.atlassian.net/rest/agile/1.0/board/7",
+      "name": "Platform Scrum",
+      "type": "scrum",
+      "location": {
+        "projectId": 10000,
+        "displayName": "Platform (PROJ)",
+        "projectName": "Platform",
+        "projectKey": "PROJ",
+        "projectTypeKey": "software",
+        "avatarURI": "https://example.atlassian.net/secure/projectavatar?size=large&pid=10000",
+        "name": "Platform (PROJ)"
+      }
+    },
+    {
+      "id": 8,
+      "self": "https://example.atlassian.net/rest/agile/1.0/board/8",
+      "name": "Operations Kanban",
+      "type": "kanban",
+      "location": {
+        "projectId": 10002,
+        "displayName": "Operations (OPS)",
+        "projectName": "Operations",
+        "projectKey": "OPS",
+        "projectTypeKey": "service_desk",
+        "avatarURI": "https://example.atlassian.net/secure/projectavatar?size=large&pid=10002",
+        "name": "Operations (OPS)"
+      }
+    }
+  ]
+}
