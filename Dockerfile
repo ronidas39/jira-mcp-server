@@ -45,7 +45,20 @@ RUN pip install --no-index --find-links=/wheels jira-mcp-server && \
 # Drop privileges
 USER app
 
-# Default: stdio transport (overridable via env)
-ENV MCP_TRANSPORT=stdio
+# Default to HTTP for container deployments. Local stdio runs are typically
+# done outside the container (the IDE assistant spawns the process directly).
+ENV MCP_TRANSPORT=http \
+    MCP_HTTP_HOST=0.0.0.0 \
+    MCP_HTTP_PORT=8765
+
+EXPOSE 8765
+
+# Lightweight liveness probe: hit the MCP endpoint and accept any response
+# under 500. The endpoint speaks JSON-RPC, so a bare GET returns a 4xx,
+# which is enough proof that the server is listening.
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD python -c "import urllib.request as u, sys; \
+sys.exit(0 if u.urlopen('http://127.0.0.1:8765/mcp', timeout=3).status < 500 else 1)" \
+  || exit 1
 
 ENTRYPOINT ["python", "-m", "jira_mcp"]

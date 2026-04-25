@@ -1,0 +1,39 @@
+# Local environment, never bake into images.
+.env
+.env.*
+!.env.example
+.audit-buffer.jsonl
+
+# Internal vibe-coding files (also gitignored).
+CLAUDE.md
+memory/
+.claude/
+
+# Tests, scripts, web UI, and tooling are not needed in the runtime image.
+tests/
+scripts/
+web/
+docs/
+
+# Python caches and editor noise.
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE and OS noise.
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Git artifacts; the wheel build does not need history.
+.git/
+.gitignore
+.github/
